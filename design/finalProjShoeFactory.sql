@@ -97,6 +97,16 @@ ALTER TABLE SalesTransaction ADD CONSTRAINT customer_id_fk FOREIGN KEY (customer
 ALTER TABLE SaleIncludes ADD CONSTRAINT transaction_id_fk FOREIGN KEY (transaction_id) REFERENCES SalesTransaction (transaction_id);
 ALTER TABLE SaleIncludes ADD CONSTRAINT product_id_fk FOREIGN KEY (product_id) REFERENCES Product (product_id);
 
+/* 
+    INDEXES
+*/
+CREATE INDEX model_category_id_ix ON Model(category_id);
+
+CREATE INDEX model_brand_id_ix ON Model(brand_id);
+
+CREATE INDEX product_model_id_ix ON Product(model_id);
+
+CREATE INDEX store_region_id_ix ON Store(region_id);
 
 /* 
     SEQUENCES
