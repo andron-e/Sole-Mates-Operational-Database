@@ -115,7 +115,7 @@ DROP SEQUENCE IF EXISTS brand_id_seq;
 DROP SEQUENCE IF EXISTS category_id_seq;
 DROP SEQUENCE IF EXISTS model_id_seq;
 DROP SEQUENCE IF EXISTS product_id_seq;
-DROP SEQUENCE IF EXISTS Customer_id_seq;
+DROP SEQUENCE IF EXISTS customer_id_seq;
 DROP SEQUENCE IF EXISTS store_id_seq;
 DROP SEQUENCE IF EXISTS region_id_seq;
 DROP SEQUENCE IF EXISTS transaction_id_seq;
@@ -136,7 +136,7 @@ CREATE SEQUENCE product_id_seq
     INCREMENT BY 1
     START WITH 1;
 
-CREATE SEQUENCE Customer_id_seq
+CREATE SEQUENCE customer_id_seq
     INCREMENT BY 1
     START WITH 1;
 
@@ -151,3 +151,41 @@ CREATE SEQUENCE region_id_seq
 CREATE SEQUENCE transaction_id_seq
     INCREMENT BY 1
     START WITH 1;
+
+
+/*
+    DATA INSERTIONS
+*/
+INSERT INTO Brand (brand_id, brand_name) (brand_id_seq.NEXTVAL, "Nikeme")
+INSERT INTO Brand (brand_id, brand_name) (brand_id_seq.NEXTVAL, "Pumeme")
+
+INSERT INTO Category VALUES (category_id_seq.NEXTVAL, 'sneakers')
+INSERT INTO Category VALUES (category_id_seq.NEXTVAL, 'flip-flops')
+
+INSERT INTO Region VALUES (region_id_seq.NEXTVAL, '3')
+INSERT INTO Region VALUES (region_id_seq.NEXTVAL, '3')
+
+INSERT INTO Product VALUES
+INSERT INTO Product VALUES
+
+INSERT INTO SalesTransaction VALUES
+INSERT INTO SalesTransaction VALUES
+
+INSERT INTO Customer VALUES
+INSERT INTO Customer VALUES
+
+INSERT INTO Store VALUES
+INSERT INTO Store VALUES
+
+INSERT INTO Model VALUES
+INSERT INTO Model VALUES
+
+
+
+/* 
+    PERMA DATA
+*/
+
+/*
+    QUERIES
+*?
