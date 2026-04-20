@@ -202,12 +202,12 @@ INSERT INTO SaleIncludes VALUES (2, 2);
 
 COMMIT;
 
+
 /*
     QUERIES
 */
 
--- 1) Total revenue and transaction count per region.
--- Useful for "which region is pulling in the most sales?"
+-- 1) "which region is pulling in the most sales?"
 SELECT
     r.region_name,
     COUNT(DISTINCT st.transaction_id) AS total_transactions,
@@ -221,8 +221,7 @@ LEFT JOIN Model m             ON p.model_id = m.model_id
 GROUP BY r.region_name
 ORDER BY total_revenue DESC;
 
--- 2) Units sold and revenue per brand.
--- Useful for "which brand is moving the most product?"
+-- 2) "which brand is moving the most product?"
 SELECT
     b.brand_name,
     COUNT(si.product_id) AS units_sold,
