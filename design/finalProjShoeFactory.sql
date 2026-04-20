@@ -156,36 +156,80 @@ CREATE SEQUENCE transaction_id_seq
 /*
     DATA INSERTIONS
 */
-INSERT INTO Brand (brand_id, brand_name) (brand_id_seq.NEXTVAL, "Nikeme")
-INSERT INTO Brand (brand_id, brand_name) (brand_id_seq.NEXTVAL, "Pumeme")
 
-INSERT INTO Category VALUES (category_id_seq.NEXTVAL, 'sneakers')
-INSERT INTO Category VALUES (category_id_seq.NEXTVAL, 'flip-flops')
+INSERT INTO Brand VALUES (brand_id_seq.NEXTVAL, 'Nikeme');
+INSERT INTO Brand VALUES (brand_id_seq.NEXTVAL, 'Pumeme');
 
-INSERT INTO Region VALUES (region_id_seq.NEXTVAL, '3')
-INSERT INTO Region VALUES (region_id_seq.NEXTVAL, '3')
+INSERT INTO Category VALUES (category_id_seq.NEXTVAL, 'sneakers');
+INSERT INTO Category VALUES (category_id_seq.NEXTVAL, 'flip-flops');
 
-INSERT INTO Product VALUES
-INSERT INTO Product VALUES
+INSERT INTO Region VALUES (region_id_seq.NEXTVAL, 'Northeast');
+INSERT INTO Region VALUES (region_id_seq.NEXTVAL, 'West');
+INSERT INTO Region VALUES (region_id_seq.NEXTVAL, 'Midwest');
+INSERT INTO Region VALUES (region_id_seq.NEXTVAL, 'Southwest');
+INSERT INTO Region VALUES (region_id_seq.NEXTVAL, 'Southeast');
 
-INSERT INTO SalesTransaction VALUES
-INSERT INTO SalesTransaction VALUES
+INSERT INTO Customer VALUES (customer_id_seq.NEXTVAL, 'Smith', 'John', '123 Main St', '215-555-1234');
+INSERT INTO Customer VALUES (customer_id_seq.NEXTVAL, 'Doe', 'Jane', '456 Oak Ave', '267-555-5678');
 
-INSERT INTO Customer VALUES
-INSERT INTO Customer VALUES
+-- brand_id 1 = Nikeme, 2 = Pumeme; category_id 1 = sneakers, 2 = flip-flops
+INSERT INTO Model VALUES (model_id_seq.NEXTVAL, 'Air Max', 120, 1, 1);
+INSERT INTO Model VALUES (model_id_seq.NEXTVAL, 'Beach Walker', 30, 2, 2);
 
-INSERT INTO Store VALUES
-INSERT INTO Store VALUES
+-- model_id 1 = Air Max, 2 = Beach Walker
+INSERT INTO Product VALUES (product_id_seq.NEXTVAL, 'Low-top', 10, 1);
+INSERT INTO Product VALUES (product_id_seq.NEXTVAL, 'Classic', 9, 2);
 
-INSERT INTO Model VALUES
-INSERT INTO Model VALUES
+-- region_id 1 = Northeast, 2 = West, 3 = Midwest, 4 = Southwest, 5 = Southeast
+INSERT INTO Store VALUES (store_id_seq.NEXTVAL, 19122, 1);
+INSERT INTO Store VALUES (store_id_seq.NEXTVAL, 90210, 2);
+INSERT INTO Store VALUES (store_id_seq.NEXTVAL, 49009, 3);
+INSERT INTO Store VALUES (store_id_seq.NEXTVAL, 19153, 4);
+INSERT INTO Store VALUES (store_id_seq.NEXTVAL, 28119, 5);
 
+INSERT INTO SalesTransaction VALUES (transaction_id_seq.NEXTVAL, TO_DATE('2025-01-15', 'YYYY-MM-DD'), 1, 1);
+INSERT INTO SalesTransaction VALUES (transaction_id_seq.NEXTVAL, TO_DATE('2025-02-20', 'YYYY-MM-DD'), 2, 2);
+
+-- transactions to products
+INSERT INTO SaleIncludes VALUES (1, 1);
+INSERT INTO SaleIncludes VALUES (1, 2);
+INSERT INTO SaleIncludes VALUES (2, 2);
 
 
 /* 
     PERMA DATA
 */
 
+COMMIT;
+
 /*
     QUERIES
-*?
+*/
+
+-- 1) Total revenue and transaction count per region.
+-- Useful for "which region is pulling in the most sales?"
+SELECT
+    r.region_name,
+    COUNT(DISTINCT st.transaction_id) AS total_transactions,
+    SUM(m.price)                      AS total_revenue
+FROM Region r
+LEFT JOIN Store s             ON r.region_id = s.region_id
+LEFT JOIN SalesTransaction st ON s.store_id = st.store_id
+LEFT JOIN SaleIncludes si     ON st.transaction_id = si.transaction_id
+LEFT JOIN Product p           ON si.product_id = p.product_id
+LEFT JOIN Model m             ON p.model_id = m.model_id
+GROUP BY r.region_name
+ORDER BY total_revenue DESC;
+
+-- 2) Units sold and revenue per brand.
+-- Useful for "which brand is moving the most product?"
+SELECT
+    b.brand_name,
+    COUNT(si.product_id) AS units_sold,
+    SUM(m.price)         AS brand_revenue
+FROM Brand b
+JOIN Model m         ON b.brand_id = m.brand_id
+JOIN Product p       ON m.model_id = p.model_id
+JOIN SaleIncludes si ON p.product_id = si.product_id
+GROUP BY b.brand_name
+ORDER BY units_sold DESC;
